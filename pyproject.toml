@@ -1,0 +1,35 @@
+# pyproject.toml
+
+[tool.poetry]
+name = "optician"
+version = "0.1.1"
+description = "Sync dbt models with Looker"
+authors = ["Remi Pham <remi.pham@getground.co.uk>", "Mariana Fernandes <mariana.fernandes@getground.co.uk>"]
+readme = "README.md"
+license = "MIT"
+repository = "https://github.com/getground/LookerSync"
+keywords = ["dbt", "looker", "sync"]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Topic :: Database"
+]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+google-cloud-bigquery = {version = "3.*", optional = true }
+psycopg2 = {version = "3.*", optional = true}
+snowflake-connector-python = {version = "3.*", optional = true}
+
+[tool.poetry.extras]
+bigquery = ["google-cloud-bigquery"]
+redshift = ["psycopg2"]
+snowflake = ["snowflake-connector-python"]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+optician = "optician.cli.commands:cli"
