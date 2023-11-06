@@ -73,7 +73,7 @@ class Config:
     def _test_config(self):
         for property_name in self._custom_config.keys():
             property_value = self.get_property(property_name)
-            if property_name not in CONFIG_OPTIONS.values():
+            if property_name not in CONFIG_OPTIONS.keys():
                 raise Exception(f"Invalid config option: {property_name}")
             # check type
             if not isinstance(property_value, CONFIG_OPTIONS[property_name]["type"]):
