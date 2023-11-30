@@ -2,16 +2,16 @@ import logging
 
 
 class Logger:
-    def __init__(self, log_file="optician.log"):
+    def __init__(self, log_file="optician.log", log_to_console=True, log_to_file=True):
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.DEBUG)
 
         self.log_file = log_file
         self.formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
 
-    def get_logger(self, log_to_console=True, log_to_file=True):
+    def get_logger(self):
         # Check if console handler already exists
-        if log_to_console and not any(
+        if self.log_to_console and not any(
             isinstance(handler, logging.StreamHandler)
             for handler in self.logger.handlers
         ):
@@ -21,7 +21,7 @@ class Logger:
             self.logger.addHandler(console_handler)
 
         # Check if file handler already exists
-        if log_to_file and not any(
+        if self.log_to_file and not any(
             isinstance(handler, logging.FileHandler) for handler in self.logger.handlers
         ):
             file_handler = logging.FileHandler(self.log_file)
