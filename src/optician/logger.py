@@ -21,4 +21,8 @@ class Logger:
             self.logger.addHandler(console_handler)
 
     def get_logger(self):
-        return self.logger
+        l = logging.getLogger(__name__)
+        if l.hasHandlers():
+            return l
+        else:
+            return self.logger
