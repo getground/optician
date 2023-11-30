@@ -4,7 +4,7 @@ import os
 import json
 from optician.logger import Logger
 
-CONSOLE_LOGGER = Logger(log_to_file=False).get_logger()
+CONSOLE_LOGGER = Logger().get_logger()
 
 FIELD_TYPE_MAPPING = {
     "BigQuery": {
