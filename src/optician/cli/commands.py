@@ -8,7 +8,7 @@ from optician.diff_tracker import DiffTracker
 from optician.lookml_generator import LookMLGenerator
 from optician.logger import Logger
 
-CONSOLE_LOGGER = Logger().get_logger(log_to_file=False)
+CONSOLE_LOGGER = Logger(log_to_file=False).get_logger()
 
 
 def cli():
