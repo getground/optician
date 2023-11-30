@@ -37,7 +37,7 @@ class Logger:
             isinstance(handler, logging.FileHandler) for handler in self.logger.handlers
         ):
             file_formatter = logging.Formatter(
-                "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+                "[%(asctime)s] - [%(levelname)s] - %(module)s - %(funcName)s -  %(message)s"
             )
             file_handler = logging.FileHandler(self.log_file)
             file_handler.setLevel(logging.DEBUG)
