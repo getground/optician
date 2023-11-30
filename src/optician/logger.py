@@ -5,6 +5,8 @@ class Logger:
     def __init__(self, log_file="optician.log", log_to_console=True, log_to_file=True):
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.DEBUG)
+        self.log_to_console = log_to_console
+        self.log_to_file = log_to_file
 
         self.log_file = log_file
         self.formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
