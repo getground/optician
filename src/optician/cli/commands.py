@@ -1,5 +1,4 @@
 import argparse
-import logging
 import os
 import sys
 
@@ -7,6 +6,9 @@ from optician.vc_client import GithubClient
 from optician.db_client import BQClient as db
 from optician.diff_tracker import DiffTracker
 from optician.lookml_generator import LookMLGenerator
+from optician.logger import Logger
+
+CONSOLE_LOGGER = Logger().get_logger()
 
 
 def cli():
@@ -114,6 +116,9 @@ def cli():
                 models_file_path = models[0]
                 with open(models_file_path, "r") as file:
                     models = file.read().splitlines()
+
+        CONSOLE_LOGGER.info(f"Models to be compared: {models}")
+
         bq = db(args.project, service_account=args.service_account)
 
         dt = DiffTracker(
@@ -124,7 +129,9 @@ def cli():
             full_refresh=args.full_refresh,
         )
         results = dt.get_diff_tables()
-        logging.info(results)
+        CONSOLE_LOGGER.info(f"New models: {results['new_models']}")
+        CONSOLE_LOGGER.info(f"Diff models: {results['diff_models']}")
+        CONSOLE_LOGGER.info(f"Missing models: {results['missing_models']}")
 
         # Save output to file
         output = results["diff_models"]
@@ -143,7 +150,7 @@ def cli():
                 with open(tables_file_path, "r") as file:
                     tables = file.read().splitlines()
 
-        logging.info(f"Models to be created: {tables}")
+        CONSOLE_LOGGER.info(f"Models to be created: {tables}")
         bq = db(args.project, service_account=args.service_account)
         lookml = LookMLGenerator(bq, args.dataset)
         lookml.generate_batch_lookml_views(
@@ -154,7 +161,7 @@ def cli():
 
     elif args.command == "push_to_looker":
         if not os.path.exists(args.input_dir):
-            logging.warn(
+            CONSOLE_LOGGER.warn(
                 f"Input directory {args.input_dir} does not exist. No files to commit. Exiting..."
             )
 
@@ -174,6 +181,7 @@ def cli():
                 target_branch=args.branch_name,
                 base_branch=args.base_branch,
             )
+
 
 def execute_from_command_line():
     cli()

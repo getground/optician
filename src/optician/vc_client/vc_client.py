@@ -1,7 +1,10 @@
 import os
 from github import Github, Auth, InputGitAuthor
 from github.GithubException import UnknownObjectException
-import logging
+from optician.logger import Logger
+
+
+CONSOLE_LOGGER = Logger().get_logger()
 
 
 class GithubClient:
@@ -31,12 +34,15 @@ class GithubClient:
         branches = self.repo.get_branches()
 
         if target_branch in [b.name for b in branches]:
-            logging.info(f"Branch {target_branch} already exists")
+            CONSOLE_LOGGER.info(f"Branch {target_branch} already exists")
             branch = self.repo.get_git_ref(f"heads/{target_branch}")
         else:
             base_ref = self.repo.get_branch(base_branch)
             self.repo.create_git_ref(
                 f"refs/heads/{target_branch}", sha=base_ref.commit.sha
+            )
+            CONSOLE_LOGGER.info(
+                f"New branch {target_branch} created in repository {self.repo.name}"
             )
 
         # Read input files from the local directory
@@ -61,7 +67,7 @@ class GithubClient:
                 content_file = self.repo.get_contents(output_path, ref=target_branch)
                 # Compare file contents
                 if content_file.decoded_content.decode() == file["content"]:
-                    logging.info(
+                    CONSOLE_LOGGER.info(
                         f"File {file['name']} already exists and it is up to date"
                     )
                     continue
@@ -74,7 +80,7 @@ class GithubClient:
                     branch=target_branch,
                     author=author,
                 )
-                logging.info(f"File {file['name']} updated")
+                CONSOLE_LOGGER.info(f"File {file['name']} has been updated")
                 continue
 
             else:
@@ -91,11 +97,11 @@ class GithubClient:
                     committer=author,
                     author=author,
                 )
-                logging.info(f"File {file['name']} created")
+                CONSOLE_LOGGER.info(f"File {file['name']} has been created")
 
         # Return if there are no changes
         if not has_changes:
-            logging.info(
+            CONSOLE_LOGGER.info(
                 "No changes detected. No commits have been made to the repository"
             )
             return
@@ -106,7 +112,9 @@ class GithubClient:
         # Create a pull request if it does not exist
         pulls = self.repo.get_pulls(state="open", sort="created", base=base_branch)
         if target_branch in [pull.head.ref for pull in pulls]:
-            logging.info(f"Pull request already exists for branch {target_branch}")
+            CONSOLE_LOGGER.info(
+                f"Pull request already exists for branch {target_branch}"
+            )
             return
 
         # Create a new pull request
@@ -117,12 +125,12 @@ class GithubClient:
             head=f"{target_branch}",
             draft=True,
         )
-        logging.info(f"Pull request created: {pull_request.html_url}")
+        CONSOLE_LOGGER.info(f"Pull request created: {pull_request.html_url}")
 
     def delete_branch(self, branch_name: str):
         try:
             ref = self.repo.get_git_ref(f"heads/{branch_name}")
             ref.delete()
-            logging.info(f"Branch {branch_name} deleted")
+            CONSOLE_LOGGER.info(f"Branch {branch_name} deleted")
         except UnknownObjectException:
-            logging.warn(f"{branch_name} does not exist")
+            CONSOLE_LOGGER.warn(f"{branch_name} does not exist")

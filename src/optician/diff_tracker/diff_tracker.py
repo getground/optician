@@ -1,4 +1,3 @@
-import logging
 from optician.db_client import DbClient
 
 

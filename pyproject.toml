@@ -2,7 +2,7 @@
 
 [tool.poetry]
 name = "optician"
-version = "0.1.1"
+version = "0.2.1"
 description = "Sync dbt models with Looker"
 authors = ["Remi Pham <remi.pham@getground.co.uk>", "Mariana Fernandes <mariana.fernandes@getground.co.uk>"]
 readme = "README.md"
