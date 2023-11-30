@@ -116,6 +116,9 @@ def cli():
                 models_file_path = models[0]
                 with open(models_file_path, "r") as file:
                     models = file.read().splitlines()
+
+        CONSOLE_LOGGER.info(f"Models to be compared: {models}")
+
         bq = db(args.project, service_account=args.service_account)
 
         dt = DiffTracker(
