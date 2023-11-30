@@ -1,15 +1,25 @@
 import logging
+import os
 
 
 class Logger:
-    def __init__(self, log_file="optician.log", log_to_console=True, log_to_file=True):
+    def __init__(
+        self,
+        log_file="optician.log",
+        log_folder="logs",
+        log_to_console=True,
+        log_to_file=True,
+    ):
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.DEBUG)
         self.log_to_console = log_to_console
         self.log_to_file = log_to_file
+        self.log_file = os.path.join(log_folder, log_file)
 
-        self.log_file = log_file
         self.formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+        if self.log_to_file:
+            if not os.path.exists(log_folder):
+                os.makedirs(log_folder)
 
     def get_logger(self):
         # Check if console handler already exists
