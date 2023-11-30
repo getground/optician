@@ -129,9 +129,9 @@ def cli():
             full_refresh=args.full_refresh,
         )
         results = dt.get_diff_tables()
-        CONSOLE_LOGGER.info(f"New models: {results['new_models']}")
-        CONSOLE_LOGGER.info(f"Diff models: {results['diff_models']}")
-        CONSOLE_LOGGER.info(f"Missing models: {results['missing_models']}")
+        CONSOLE_LOGGER.info(
+            f"New models: {results['new_models']} {os.linesep}Diff models: {results['diff_models']}{os.linesep}Missing models: {results['missing_models']}"
+        )
 
         # Save output to file
         output = results["diff_models"]
