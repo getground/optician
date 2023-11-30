@@ -41,6 +41,9 @@ class GithubClient:
             self.repo.create_git_ref(
                 f"refs/heads/{target_branch}", sha=base_ref.commit.sha
             )
+            CONSOLE_LOGGER.info(
+                f"New branch {target_branch} created in repository {self.repo.name}"
+            )
 
         # Read input files from the local directory
         files = []
@@ -77,7 +80,7 @@ class GithubClient:
                     branch=target_branch,
                     author=author,
                 )
-                CONSOLE_LOGGER.info(f"File {file['name']} updated")
+                CONSOLE_LOGGER.info(f"File {file['name']} has been updated")
                 continue
 
             else:
@@ -94,7 +97,7 @@ class GithubClient:
                     committer=author,
                     author=author,
                 )
-                CONSOLE_LOGGER.info(f"File {file['name']} created")
+                CONSOLE_LOGGER.info(f"File {file['name']} has been created")
 
         # Return if there are no changes
         if not has_changes:

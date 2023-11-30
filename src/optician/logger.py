@@ -16,7 +16,6 @@ class Logger:
         self.log_to_file = log_to_file
         self.log_file = os.path.join(log_folder, log_file)
 
-        self.formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
         if self.log_to_file:
             if not os.path.exists(log_folder):
                 os.makedirs(log_folder)
@@ -27,18 +26,22 @@ class Logger:
             isinstance(handler, logging.StreamHandler)
             for handler in self.logger.handlers
         ):
+            console_formatter = logging.Formatter("%(message)s")
             console_handler = logging.StreamHandler()
             console_handler.setLevel(logging.INFO)
-            console_handler.setFormatter(self.formatter)
+            console_handler.setFormatter(console_formatter)
             self.logger.addHandler(console_handler)
 
         # Check if file handler already exists
         if self.log_to_file and not any(
             isinstance(handler, logging.FileHandler) for handler in self.logger.handlers
         ):
+            file_formatter = logging.Formatter(
+                "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+            )
             file_handler = logging.FileHandler(self.log_file)
             file_handler.setLevel(logging.DEBUG)
-            file_handler.setFormatter(self.formatter)
+            file_handler.setFormatter(file_formatter)
             self.logger.addHandler(file_handler)
 
         return self.logger
