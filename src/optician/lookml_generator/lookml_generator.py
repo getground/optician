@@ -2,6 +2,9 @@ import logging
 from optician.db_client import db_client as db
 import os
 import json
+from optician.logger import Logger
+
+CONSOLE_LOGGER = Logger().get_logger(log_to_file=False)
 
 FIELD_TYPE_MAPPING = {
     "BigQuery": {
@@ -289,7 +292,7 @@ class LookMLGenerator:
         with open(lookml_file_path, "w") as file:
             file.write(view_output)
 
-        logging.info(f"LookML view written to {lookml_file_path}")
+        CONSOLE_LOGGER.info(f"LookML view written to {lookml_file_path}")
 
     def generate_batch_lookml_views(
         self, tables: list, output_dir: str = None, override_dataset_id: str = None
