@@ -1,4 +1,4 @@
-from google.cloud import bigquery
+from importlib import import_module
 
 
 class DbClient:
@@ -12,7 +12,7 @@ class DbClient:
         if self.db_type == "bigquery":
             self.db_client = BQClient(
                 project_id=self.credentials.get("project_id", None),
-                service_account=self.db_type.get("service_account", None),
+                service_account=self.credentials.get("service_account", None),
             )
         else:
             raise Exception(f"Database type {self.db_type} not supported")
@@ -23,12 +23,16 @@ class DbClient:
     def list_tables(self, *args, **kwargs):
         return self.db_client.list_tables(*args, **kwargs)
 
+    # Defining the method in the client class since the definition
+    # may differ between databases
     def is_nested_field(self, field):
         return self.db_client.is_nested_field(field)
 
 
 class BQClient:
     def __init__(self, project_id: str, service_account: str = None):
+        bigquery = import_module("google.cloud.bigquery")
+
         self.project_id = project_id
         if not self.project_id:
             raise ValueError("Project ID is required for BigQuery client")

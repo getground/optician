@@ -63,7 +63,7 @@ def cli():
         "--project", type=str, help="Project ID", required=True
     )
     generate_lookml_parser.add_argument(
-        "--dataset", type=str, help="Dataset ID to read the schema from", required=True
+        "--dataset", type=str, help="Dataset ID to read the models from", required=True
     )
     generate_lookml_parser.add_argument(
         "--tables",
