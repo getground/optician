@@ -2,24 +2,37 @@ from google.cloud import bigquery
 
 
 class DbClient:
-    def get_client(self):
-        raise NotImplementedError
+    SUPPORTED_DATABASES = ["bigquery"]
 
-    def get_table(self, dataset_id, table_id):
-        raise NotImplementedError
+    def __init__(self, db_type: str, credentials: dict):
+        self.db_type = db_type
+        self.credentials = credentials
+        self.db_client = None
 
-    def list_tables(self, dataset_id):
-        raise NotImplementedError
+        if self.db_type == "bigquery":
+            self.db_client = BQClient(
+                project_id=self.credentials.get("project_id", None),
+                service_account=self.db_type.get("service_account", None),
+            )
+        else:
+            raise Exception(f"Database type {self.db_type} not supported")
 
-    def is_nested_fielf(self, field):
-        raise NotImplementedError
+    def get_table(self, *args, **kwargs):
+        return self.db_client.get_table(*args, **kwargs)
+
+    def list_tables(self, *args, **kwargs):
+        return self.db_client.list_tables(*args, **kwargs)
+
+    def is_nested_field(self, field):
+        return self.db_client.is_nested_field(field)
 
 
-class BQClient(DbClient):
+class BQClient:
     def __init__(self, project_id: str, service_account: str = None):
         self.project_id = project_id
+        if not self.project_id:
+            raise ValueError("Project ID is required for BigQuery client")
         self.service_account = service_account
-        self.client_name = "BigQuery"
 
         if self.service_account:
             # Create BigQuery client with service account
@@ -30,7 +43,8 @@ class BQClient(DbClient):
             # Create BigQuery client with oauth
             self.bq = bigquery.Client(project=self.project_id)
 
-    def is_nested_field(self, field):
+    @staticmethod
+    def is_nested_field(field):
         return field.internal_type == "RECORD" and field.mode == "NULLABLE"
 
     def get_client(self):
