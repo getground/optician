@@ -3,7 +3,7 @@ import os
 import sys
 
 from optician.vc_client import GithubClient
-from optician.db_client import BQClient as db
+from optician.db_client import DbClient as db
 from optician.diff_tracker import DiffTracker
 from optician.lookml_generator import LookMLGenerator
 from optician.logger import Logger
@@ -18,6 +18,12 @@ def cli():
 
     # track_diff_models parser
     diff_tracker_parser = subparsers.add_parser("diff_tracker", help="Run diff tracker")
+    diff_tracker_parser.add_argument(
+        "--db_type",
+        type=str,
+        help="Database type (bigquery, redshift, snowflake)",
+        required=True,
+    )
     diff_tracker_parser.add_argument(
         "--dataset1_name", type=str, help="Dataset 1", required=True
     )
@@ -46,6 +52,12 @@ def cli():
     # generate_lookml parser
     generate_lookml_parser = subparsers.add_parser(
         "generate_lookml", help="Run generate LookML"
+    )
+    generate_lookml_parser.add_argument(
+        "--db_type",
+        type=str,
+        help="Database type (bigquery, redshift, snowflake)",
+        required=True,
     )
     generate_lookml_parser.add_argument(
         "--project", type=str, help="Project ID", required=True
@@ -119,12 +131,18 @@ def cli():
 
         CONSOLE_LOGGER.info(f"Models to be compared: {models}")
 
-        bq = db(args.project, service_account=args.service_account)
+        credentials = {
+            "service_account": args.service_account,
+            "project_id": args.project,
+            # Add other credentials for other databases here
+        }
+
+        db_client = db(db_type=args.db_type, credentials=credentials)
 
         dt = DiffTracker(
             dataset1_name=args.dataset1_name,
             dataset2_name=args.dataset2_name,
-            db_client=bq,
+            db_client=db_client,
             models=models,
             full_refresh=args.full_refresh,
         )
@@ -151,8 +169,15 @@ def cli():
                     tables = file.read().splitlines()
 
         CONSOLE_LOGGER.info(f"Models to be created: {tables}")
-        bq = db(args.project, service_account=args.service_account)
-        lookml = LookMLGenerator(bq, args.dataset)
+
+        credentials = {
+            "service_account": args.service_account,
+            "project_id": args.project
+            # Add other credentials for other databases here
+        }
+
+        db_client = db(db_type=args.db_type, credentials=credentials)
+        lookml = LookMLGenerator(db_client, args.dataset)
         lookml.generate_batch_lookml_views(
             tables=tables,
             output_dir=args.output_dir,
