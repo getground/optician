@@ -1,10 +1,10 @@
 # Optician
 Optician automatically generates your LookML views from your database models.
 
-Optician was developped at GetGround, where we use dbt, BigQuery and Looker, so some of its usage is aligned with these tools' paradigm.
+Optician was created at [GetGround](https://www.getground.co.uk/), where we use dbt, BigQuery and Looker, so you may realise that its usage may be aligned with this data stack paradigm.
 
 Optician has 3 features:
-- LookML generator: this is the main feature, that reads the table schema from database and creates the LookML base view
+- LookML generator: this is the main feature, that reads the table schemas from database and creates the LookML base views
 - [Optional] Track differences of models between tables in two distinct schemas in the same database, which are meant to correspond to your development and production schemas, in order to identify which models need to be synced.
 - [Optional] Commit the LookML view files to your Looker repository (GitHub supported only at the moment)
 
@@ -91,13 +91,139 @@ pip install optician[bigquery]
 
 ## Commandds
 
-Talk about commands and their args here
+### Diff Tracker
 
+```bash
+optician diff_tracker [options]
+```
+
+Use this command if you need to compare models between 2 different schemas in a database, as supposed. This command will return a list of the models which are different, ie, the ones you will need to update. This can be particulary useful when developping on your models, to know which models you will need to refresh in Looker.
+
+#### Arguments
+
+- `--db_type` (type: str, required: True): Database type (bigquery, redshift, snowflake).
+
+- `--dataset1_name` (type: str, required: True): Name of Dataset 1.
+
+- `--dataset2_name` (type: str, required: True): Name of Dataset 2.
+
+- `--project` (type: str, required: True): Project ID.
+
+- `--service_account` (type: str, required: False): Google Service Account.
+
+- `--models` (type: str): List of model names to compare (comma-separated) or file path with a model per line. You can pass your dbt marts only, for example.
+
+- `--output` (type: str): Output file path to write the results to.
+
+- `--full-refresh` (action: Boolean, default: False): If you want to perform a full refresh of all models. This will return all models inputed (so this step does not run). This is only useful if you want to skip this command when refreshing all models, for example in a CI pipeline.
+
+#### Example
+```bash
+optician diff_tracker \
+	--db_type bigquery \
+    --project my-database-name \
+    --dataset1_name dbt_dev \
+    --dataset2_name dbt_prod \
+    --models tmp/marts.txt \
+    --output tmp/diff.txt
+```
+
+### Generate LookML
+
+```bash
+optician generate_lookml [options]
+```
+
+This command created the LookML base views.
+
+#### Arguments
+
+- `--db_type` (type: str, required: True): Database type (bigquery, redshift, snowflake).
+
+- `--project` (type: str, required: True): Project ID.
+
+- `--dataset` (type: str, required: True): Dataset ID/database schema to read the models from.
+
+- `--tables` (type: str, required: True): List of Table IDs separated by a comma or provide a file path with a table name per line. You can use the same file outputted by the `diff_tracker`, for example.
+
+- `--output-dir` (type: str, required: False): Output Directory. If not specified, it will write the files to the current directory.
+
+- `--override-dataset-id` (type: str, required: False): Override Dataset ID. For example, you may be developping and reading from a dev dataset, but you may want to create the LookML views pointing to your production dataset. Or you may have defined a constant in Looker for you dataset name
+    ```lookml
+    constant: dataset {
+        value: "dbt_prod"
+    }
+    ```
+    and set this option value to @{dataset} as in Example 2.
+
+- `--service-account` (type: str, required: False): Service Account.
+
+#### Examples
+
+Example 1:
+```bash
+optician generate_lookml \
+    --db_type bigquery \
+    --project my-database-name \
+    --dataset dbt_dev \
+    --tables tmp/diff.txt \
+    --override-dataset-id dbt_prod \
+    --output tmp/lookml/
+```
+
+Example 2:
+```bash
+optician generate_lookml \
+    --db_type snowflake \
+    --project my-database-name \
+    --dataset dbt_dev \
+    --tables deals,contacts \
+    --override-dataset-id @{dataset}
+```
+
+### Push to Looker
+
+```bash
+optician push_to_looker [options]
+```
+
+You can use this command to commit and push your LookML views generated to your Looker GitHub repository.
+
+#### Arguments
+
+- `--token` (type: str, required: True): GitHub Token.
+
+- `--repo` (type: str, required: True): GitHub Repo.
+
+- `--user-email` (type: str, required: False): GitHub User Email.
+
+- `--input-dir` (type: str, required: True): Path that contains new files to be committed.
+
+- `--output-dir` (type: str, required: True): Directory in the repo to write the LookML files to.
+
+- `--branch-name` (type: str, required: True): Name of the branch to commit the changes to.
+
+- `--base-branch` (type: str, default: "main"): Name of the base branch (e.g. main, master).
+
+#### Examples
+
+Example 1:
+In this example we have the GitHub Token saved in an environment variable `$GH_TOKEN`. We are reading the views from the directory tmp/lookml that we have used as output in the `generate_lookml` command and we are writing the files to a folder _base in our repo.
+
+```bash
+optician push_to_looker \
+    --token $GH_TOKEN \
+    --repo mycompany/looker \
+    --branch-name update-deals \
+    --base-branch main \
+    --input-dir tmp/lookml/ \
+    --output-dir _base
+```
 
 ## How to contribute
 
-We are only supporting BigQuery at the moment, but you are able to contribute by extending our DbClient class for your database.
+We are only supporting BigQuery at the moment, but you are able to contribute by updating the `db_client.py` file.
 
 In order to contribute, fork this repository, develop on a new branch and then open a pull request.
 
-mention pre commit
+Make sure you install all dependencies into a virtual environment and also install pre-commit `pre-commit install` so that the code is linted when committing.
