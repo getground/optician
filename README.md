@@ -15,7 +15,7 @@ Assumptions:
 ## Setup
 
 1. Create the Optician configuration file `.optician/config.json` (you can name it another way) somewhere in your computer (we suggest in the dbt or Looker repo)
-2. Create the environment variable `OPTICIAN_CONFIG_FILE` which will be the absolute path to that file
+2. Create the environment variable `OPTICIAN_CONFIG_FILE` which will be the absolute path to the file created in 1
 3. You need to be able to connect to your database. For BigQuery, you can connect either by Oauth or Service Account.
 4. [Optional] Create an environment variable `GH_TOKEN` for your GitHub personal token. You need to create this token in [GitHub](https://github.com/settings/tokens) with read:project, repo, user:email permissions. This will allow you to commit your Looker views directly to the Looker repository.
 
@@ -80,14 +80,18 @@ Example of a config file:
 ```
 
 
-
 ### Install
 
 You can install optician from a PyPi repository. We suggest you install it into a virtual environment.
+Please specify which database (or databases) you will be using as shown below.
 
 ```shell
 pip install optician[bigquery]
-``````
+```
+
+## Commandds
+
+Talk about commands and their args here
 
 
 ## How to contribute
@@ -96,4 +100,4 @@ We are only supporting BigQuery at the moment, but you are able to contribute by
 
 In order to contribute, fork this repository, develop on a new branch and then open a pull request.
 
-pre commit
+mention pre commit
