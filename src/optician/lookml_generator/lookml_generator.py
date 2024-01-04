@@ -1,4 +1,3 @@
-import logging
 from optician.db_client import db_client as db
 import os
 import json
