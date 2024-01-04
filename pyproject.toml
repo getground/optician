@@ -7,8 +7,8 @@ description = "Sync dbt models with Looker"
 authors = ["Remi Pham <remi.pham@getground.co.uk>", "Mariana Fernandes <mariana.fernandes@getground.co.uk>"]
 readme = "README.md"
 license = "MIT"
-repository = "https://github.com/getground/LookerSync"
-keywords = ["dbt", "looker", "sync"]
+repository = "https://github.com/getground/optician"
+keywords = ["optician", "looker", "sync", "lookml", "dbt"]
 classifiers = [
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python",
