@@ -2,13 +2,13 @@
 
 [tool.poetry]
 name = "optician"
-version = "0.2.1"
+version = "0.3.0"
 description = "Sync dbt models with Looker"
 authors = ["Remi Pham <remi.pham@getground.co.uk>", "Mariana Fernandes <mariana.fernandes@getground.co.uk>"]
 readme = "README.md"
 license = "MIT"
-repository = "https://github.com/getground/LookerSync"
-keywords = ["dbt", "looker", "sync"]
+repository = "https://github.com/getground/optician"
+keywords = ["optician", "looker", "sync", "lookml", "dbt"]
 classifiers = [
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python",
@@ -17,7 +17,9 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
+# These packages are mandatory
 python = "^3.9"
+# The packages are optional dependencies
 google-cloud-bigquery = {version = "3.*", optional = true }
 psycopg2 = {version = "3.*", optional = true}
 snowflake-connector-python = {version = "3.*", optional = true}
@@ -25,6 +27,7 @@ snowflake-connector-python = {version = "3.*", optional = true}
 [tool.poetry.extras]
 bigquery = ["google-cloud-bigquery"]
 redshift = ["psycopg2"]
+postgres = ["psycopg2"]
 snowflake = ["snowflake-connector-python"]
 
 [build-system]

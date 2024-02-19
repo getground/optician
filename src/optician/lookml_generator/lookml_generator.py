@@ -1,4 +1,3 @@
-import logging
 from optician.db_client import db_client as db
 import os
 import json
@@ -7,7 +6,7 @@ from optician.logger import Logger
 CONSOLE_LOGGER = Logger().get_logger()
 
 FIELD_TYPE_MAPPING = {
-    "BigQuery": {
+    "bigquery": {
         "INTEGER": "number",
         "INT64": "number",
         "FLOAT": "number",
@@ -129,7 +128,7 @@ class LookMLGenerator:
 
     def _get_looker_type(self, field: db.Field):
         # Default unknown types to string
-        return FIELD_TYPE_MAPPING[self.client.client_name].get(
+        return FIELD_TYPE_MAPPING[self.client.db_type].get(
             field.internal_type, "string"
         )
 
