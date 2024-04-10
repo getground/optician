@@ -3,20 +3,25 @@
 [tool.poetry]
 name = "optician"
 version = "1.0.0"
-description = "Sync dbt models with Looker"
+description = "Sync your data warehouse tables to Looker"
 authors = [
     "GetGround <bi@getground.co.uk>"
 ]
 readme = "README.md"
-license = "MIT"
+license = { file = "LICENSE" }
 repository = "https://github.com/getground/optician"
-keywords = ["optician", "looker", "sync", "lookml", "dbt"]
+keywords = ["optician", "looker", "sync", "lookml", "dbt", "data warehouse"]
 classifiers = [
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Topic :: Database"
+    "Topic :: Database",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Development Status :: 4 - Beta"
 ]
+
+[project.urls]
+Homepage = "https://github.com/getground/optician"
 
 [tool.poetry.dependencies]
 # These packages are mandatory
