@@ -119,7 +119,7 @@ Use this command if you need to compare models between 2 different schemas in a 
 #### Example
 ```bash
 optician diff_tracker \
-	--db_type bigquery \
+    --db_type bigquery \
     --project my-database-name \
     --dataset1_name dbt_dev \
     --dataset2_name dbt_prod \
