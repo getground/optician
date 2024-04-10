@@ -2,9 +2,11 @@
 
 [tool.poetry]
 name = "optician"
-version = "0.3.0"
+version = "1.0.0"
 description = "Sync dbt models with Looker"
-authors = ["Remi Pham <remi.pham@getground.co.uk>", "Mariana Fernandes <mariana.fernandes@getground.co.uk>"]
+authors = [
+    "GetGround <bi@getground.co.uk>"
+]
 readme = "README.md"
 license = "MIT"
 repository = "https://github.com/getground/optician"
