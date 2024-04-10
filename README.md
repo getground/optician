@@ -12,9 +12,9 @@ Assumptions:
 - The fields in your tables have descriptions (supported by some databases only). If you use dbt, you can use `persist-docs` to store the fields descriptions in the database (see [dbt docs](https://docs.getdbt.com/reference/resource-configs/persist_docs)).
 - Your Looker project is structured with base, standard and logical layers, following [this approach](https://www.spectacles.dev/post/fix-your-lookml-project-structure). Optician helps you create and update your base layer, without any measures.
 
-## Setup
+## How to use it
 
-### Install
+### Installation
 
 You can install optician from a PyPi repository. We suggest you install it into a virtual environment.
 Please specify which database (or databases) you will be using, as in the example below.
@@ -23,6 +23,7 @@ Please specify which database (or databases) you will be using, as in the exampl
 pip install optician[bigquery]
 ```
 
+### Setup
 1. Create the Optician configuration file `.optician/config.json` (you can name it another way) somewhere in your computer (we suggest inside the dbt or Looker repo)
 2. Create the environment variable `OPTICIAN_CONFIG_FILE` which will be the absolute path to the file created in 1
 3. You need to be able to connect to your database. For BigQuery, you can connect either by Oauth or Service Account.
