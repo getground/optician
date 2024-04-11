@@ -26,6 +26,7 @@ Homepage = "https://github.com/getground/optician"
 [tool.poetry.dependencies]
 # These packages are mandatory
 python = "^3.9"
+PyGithub = "^2.1.1"
 # The packages are optional dependencies
 google-cloud-bigquery = {version = "3.*", optional = true }
 psycopg2 = {version = "3.*", optional = true}
