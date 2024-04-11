@@ -1065,4 +1065,4 @@ snowflake = ["snowflake-connector-python"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "e7d84fe005537deb177955c35b541da13e6bc8901a5a3e6fa5d360f8b4137945"
+content-hash = "33a9795911eb6b26c33f567ce19b28db276e2f5b25df28ef9ef455ed5ac325fe"
