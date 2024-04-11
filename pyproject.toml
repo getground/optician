@@ -8,7 +8,7 @@ authors = [
     "GetGround <bi@getground.co.uk>"
 ]
 readme = "README.md"
-license = { file = "LICENSE" }
+license = "MIT"
 repository = "https://github.com/getground/optician"
 keywords = ["optician", "looker", "sync", "lookml", "dbt", "data warehouse"]
 classifiers = [
@@ -29,7 +29,7 @@ python = "^3.9"
 PyGithub = "^2.1.1"
 # The packages are optional dependencies
 google-cloud-bigquery = {version = "3.*", optional = true }
-psycopg2 = {version = "3.*", optional = true}
+psycopg2 = {version = "2.*", optional = true}
 snowflake-connector-python = {version = "3.*", optional = true}
 
 [tool.poetry.extras]
