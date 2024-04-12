@@ -88,7 +88,7 @@ Example of a config file:
 ```
 
 
-## Commandds
+## Commands
 
 ### Diff Tracker
 
@@ -96,7 +96,7 @@ Example of a config file:
 optician diff_tracker [options]
 ```
 
-Use this command if you need to compare models between 2 different schemas in a database, as supposed. This command will return a list of the models which are different, ie, the ones you will need to update. This can be particulary useful when developping on your models, to know which models you will need to refresh in Looker.
+Use this command if you need to compare models between 2 different schemas in a database, supposed to correspond to your dev and prod targets. This command will return a list of the models which are different, ie, the ones you will need to update. This can be particulary useful when developping on your models, to know which models you will need to refresh in Looker.
 
 #### Arguments
 
