@@ -2,7 +2,7 @@
 
 [tool.poetry]
 name = "optician"
-version = "1.0.1"
+version = "1.0.2"
 description = "Sync your data warehouse tables to Looker"
 authors = [
     "GetGround <bi@getground.co.uk>"
