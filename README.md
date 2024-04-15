@@ -18,7 +18,7 @@ You can install optician from a PyPi repository. We suggest you install it into 
 Please specify which database (or databases) you will be using, as in the example below.
 
 ```shell
-pip install optician[bigquery]
+pip install "optician[bigquery]"
 ```
 
 ## Setup
