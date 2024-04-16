@@ -1,0 +1,46 @@
+# pyproject.toml
+
+[tool.poetry]
+name = "optician"
+version = "1.1.0"
+description = "Sync your data warehouse tables to Looker"
+authors = [
+    "GetGround <bi@getground.co.uk>"
+]
+readme = "README.md"
+license = "MIT"
+repository = "https://github.com/getground/optician"
+keywords = ["optician", "looker", "sync", "lookml", "dbt", "data warehouse"]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Topic :: Database",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Development Status :: 4 - Beta"
+]
+
+[project.urls]
+Homepage = "https://github.com/getground/optician"
+
+[tool.poetry.dependencies]
+# These packages are mandatory
+python = "^3.9"
+PyGithub = "^2.3.0"
+# The packages are optional dependencies
+google-cloud-bigquery = {version = "^3.10.0", optional = true }
+psycopg2 = {version = "^2.9.9", optional = true}
+snowflake-connector-python = {version = "^3.8.1", optional = true}
+
+[tool.poetry.extras]
+bigquery = ["google-cloud-bigquery"]
+redshift = ["psycopg2"]
+postgres = ["psycopg2"]
+snowflake = ["snowflake-connector-python"]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+optician = "optician.cli.commands:cli"
