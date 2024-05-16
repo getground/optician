@@ -185,11 +185,11 @@ class LookMLGenerator:
         # Don't write these fields
         if field_mode is not None:
             if field_mode in self.ignore_modes:
-                pass
+                return ""
 
         if self.ignore_column_types:
             if field_type in self.ignore_column_types:
-                pass
+                return ""
 
         # Handle nested fields
         if is_nested_field:
